@@ -11,13 +11,16 @@ def index():
 @app.route('/generate', methods=['POST'])
 def generate():
     target = request.form.get('target')
+    subnet = request.form.get('subnet_type')
     ports = request.form.get('ports')
     scan_type = request.form.get('scan_type')
 
-    if ports == "":
-        ports = "*"
+    if ports == "" or ports == "*" or ports == " ":
+        ports = "-"
+    else:
+        ports = f" {ports}"
 
-    nmap_command = f"nmap {scan_type} -p {ports} {target}"
+    nmap_command = f"nmap {scan_type} -p{ports} {target}{subnet}"
 
     return render_template('result.html', nmap_command=nmap_command)
 

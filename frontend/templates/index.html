@@ -10,7 +10,7 @@
         <!-- Custom CSS -->
         <style>
             body {
-                background: url('https://source.unsplash.com/1600x900/?cybersecurity') no-repeat center center fixed;
+                background: url('https://picsum.photos/id/48/1600/900/?blur') no-repeat center center fixed;
                 background-size: cover;
                 height: 100vh;
                 display: flex;
@@ -47,45 +47,27 @@
                 opacity: 1;
             }
 
-            .input-group {
-                margin-bottom: 1rem;
-            }
-
-            .file-upload {
-                display: none;
-            }
-
         </style>
     </head>
 
     <body>
         <div class="blur-box shadow-lg">
             <h1 class="text-center mb-4">Nmap Command Generator</h1>
-            <form action="/generate" method="post" enctype="multipart/form-data">
+            <form action="/generate" method="post">
                 <div class="mb-3">
-                    <label class="form-label">Target IP/Domain:</label>
-                    <div class="d-flex">
-                        <div class="form-check me-3">
-                            <input type="radio" id="custom_ip" name="target_option" class="form-check-input"
-                                value="custom" checked onclick="toggleInput()">
-                            <label for="custom_ip" class="form-check-label">
-                                <i class="bi bi-pencil-square"></i> Custom IP/Domain
-                            </label>
+                    <div class="row">
+                        <label for="target" class="form-label">Target IP/Domain:</label>
+                        <div class="col-6">
+                            <input type="text" id="target" name="target" class="form-control" required>
                         </div>
-                        <div class="form-check">
-                            <input type="radio" id="from_file" name="target_option" class="form-check-input"
-                                value="file" onclick="toggleInput()">
-                            <label for="from_file" class="form-check-label">
-                                <i class="bi bi-file-earmark-text"></i> From file
-                            </label>
+                        <div class="col">
+                            <select id="subnet_type" name="subnet_type" class="form-select">
+                                <option value="/8">/8</option>
+                                <option value="/16">/16</option>
+                                <option value="/24">/24</option>
+                                <option value="/32">/32</option>
+                            </select>
                         </div>
-                    </div>
-                    <div id="custom_input" class="input-group">
-                        <input type="text" id="target" name="target" class="form-control mt-3"
-                            placeholder="Enter IP/Domain" required>
-                    </div>
-                    <div id="file_input" class="input-group file-upload">
-                        <input type="file" id="target_file" name="target_file" class="form-control mt-3" accept=".txt">
                     </div>
                 </div>
                 <div class="mb-3 position-relative">
@@ -116,26 +98,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Custom JS -->
         <script>
-            function toggleInput() {
-                const customInput = document.getElementById("custom_input");
-                const fileInput = document.getElementById("file_input");
-                const customRadio = document.getElementById("custom_ip");
-                if (customRadio.checked) {
-                    customInput.style.display = "block";
-                    fileInput.style.display = "none";
-                } else {
-                    customInput.style.display = "none";
-                    fileInput.style.display = "block";
-                }
-            }
-
-            // Initialize the scan info box with the default selection
-            document.addEventListener("DOMContentLoaded", () => {
-                const scanType = document.getElementById("scan_type").value;
-                document.getElementById("scan-info").textContent = info[scanType];
-                toggleInput(); // Initialize input based on the default selection
-            });
-
             let hoverTimeout;
 
             const info = {
@@ -151,13 +113,19 @@
                     const scanType = document.getElementById("scan_type").value;
                     document.getElementById("scan-info").textContent = info[scanType];
                     document.getElementById("popup").classList.add("visible");
-                }, 3000); // 3-second delay
+                }, 500);
             }
 
             function stopHover() {
                 clearTimeout(hoverTimeout);
                 document.getElementById("popup").classList.remove("visible");
             }
+
+            // Initialize the scan info box with the default selection
+            document.addEventListener("DOMContentLoaded", () => {
+                const scanType = document.getElementById("scan_type").value;
+                document.getElementById("scan-info").textContent = info[scanType];
+            });
         </script>
     </body>
 
